@@ -1,132 +1,111 @@
-"""
-schema.py — общие Pydantic-схемы пайплайна
-===========================================
-Заполняется постепенно, по мере прохождения раундов. На старте — пусто.
-
-Карта моделей по раундам:
-  Раунд 1   — Concern, Participant
-  Раунд 2   — AspectSentiment, ParticipantSentiment
-  Раунд 2.5 — DiscoveredAspects (для autodiscovery)
-  Раунд 3   — ChunkSummary, DiscussionSummary
-  Раунд 3.5 — GroupSummary (для иерархического Map-Reduce)
-  Раунд 5   — ActionVerdict, JudgeReport
-  Раунд 7   — MultiDocSummary
-"""
-
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Literal, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
+
+AspectName = Literal["novelty", "justification", "practicality", "risks"]
+ClaimSupport = Literal["supported", "weakly_supported", "not_supported"]
 
 
-# ══════════════════════════════════════════════════════════
-# Раунд 1 — Information Extraction
-# ══════════════════════════════════════════════════════════
-class Concern(BaseModel):
-    category: Literal["price", "speed", "ux", "support", "feature"]
-    severity: int = Field(ge=1, le=5)
-    quote: str
+class Claim(BaseModel):
+    """Тезис/утверждение эксперта"""
+    claim_text: str = Field(min_length=10, max_length=300)
+    topic: str = Field(min_length=3, max_length=50)
+    quote: str = Field(min_length=15)
+    confidence: Literal[1, 2, 3, 4, 5]
 
 
-class Participant(BaseModel):
-    name: str
-    age: Optional[int] = None
-    city: str
-    occupation: str
-    concerns: list[Concern]
-    competitor_mentions: list[str] = Field(default_factory=list)
+class Expert(BaseModel):
+    """Информация об эксперте"""
+    expert_id: str
+    name: Optional[str] = None
+    field: Optional[str] = None  # область экспертизы (психология, философия)
+    school: Optional[str] = None  # научная школа/направление
 
 
-class MatchVerdict(BaseModel):
-    matched: bool
-    matched_index: int = Field(default=-1, description="номер жалобы или -1")
-    reason: str = ""
+class Interview(BaseModel):
+    """Структурированное интервью/лекция"""
+    interview_id: str
+    title: str = Field(min_length=3, max_length=100)
+    expert: Expert
+    interview_date: Optional[str] = None
+    source: Literal["youtube", "podcast", "lecture", "transcript", "unknown"] = "unknown"
+    duration_minutes: Optional[int] = Field(default=None, ge=5, le=240)
+    claims: list[Claim] = Field(default_factory=list)
+    short_summary: str = Field(min_length=30, max_length=400)
+    main_topic: str = Field(min_length=10, max_length=100)
+
+    @field_validator("interview_date")
+    @classmethod
+    def validate_date_not_future(cls, value: Optional[str]) -> Optional[str]:
+        if value:
+            parsed = datetime.strptime(value, "%Y-%m-%d")
+            if parsed > datetime.now():
+                raise ValueError("interview_date must not be in the future")
+        return value
 
 
-# ══════════════════════════════════════════════════════════
-# Раунд 2 — Аспектный анализ
-# ══════════════════════════════════════════════════════════
-class AspectSentiment(BaseModel):
-    aspect: Literal["price", "speed", "ux", "support", "feature"]
-    sentiment: Literal["positive", "negative", "neutral"]
-    quote: str
-    confidence: float = Field(ge=0, le=1)
+class AspectMention(BaseModel):
+    """Оценка по аспекту"""
+    aspect: AspectName
+    score: Literal[-1, 0, 1]
+    evidence: str = Field(min_length=10)
+    quote: str = Field(min_length=15)
 
 
-class ParticipantSentiment(BaseModel):
-    name: str
-    aspects: list[AspectSentiment]
+class InterviewAspects(BaseModel):
+    """Аспектный анализ интервью"""
+    interview_id: str
+    title: str
+    aspects: list[AspectMention] = Field(default_factory=list)
 
 
-# ══════════════════════════════════════════════════════════
-# Раунд 2.5 — Autodiscovery аспектов
-# ══════════════════════════════════════════════════════════
-class DiscoveredAspect(BaseModel):
-    name: str
-    description: str = Field(min_length=5)
-
-
-class DiscoveredAspects(BaseModel):
-    aspects: list[DiscoveredAspect] = Field(min_length=3, max_length=12)
-
-
-class DynamicAspect(BaseModel):
-    aspect: str
-    sentiment: Literal["positive", "negative", "neutral"]
-    quote: str
-    confidence: float = Field(ge=0, le=1)
-
-
-class DynamicParticipant(BaseModel):
-    name: str
-    aspects: list[DynamicAspect]
-
-
-# ══════════════════════════════════════════════════════════
-# Раунд 3 — Map-Reduce-резюме
-# ══════════════════════════════════════════════════════════
 class ChunkSummary(BaseModel):
-    speaker: str
-    key_points: list[str] = Field(min_length=1, max_length=6)
-    sentiment: Literal["positive", "negative", "mixed"]
+    """Map-резюме блока интервью"""
+    interview_ids: list[str] = Field(min_length=1)
+    key_claims: list[str] = Field(min_length=2)
+    dominant_aspects: list[AspectName] = Field(min_length=1)
+    notable_quotes: list[str] = Field(default_factory=list)
 
 
 class DiscussionSummary(BaseModel):
-    headline: str
-    key_findings: list[str] = Field(min_length=2, max_length=8)
-    action_items: list[str] = Field(min_length=1, max_length=8)
+    """Итоговая сводка по всем интервью"""
+    headline: str = Field(min_length=10, max_length=150)
+    key_findings: list[str] = Field(min_length=3, max_length=8)
+    action_items: list[str] = Field(min_length=2, max_length=6)
+    open_questions: list[str] = Field(default_factory=list, max_length=4)
 
 
-# ══════════════════════════════════════════════════════════
-# Раунд 3.5 — Иерархический Map-Reduce
-# ══════════════════════════════════════════════════════════
-class GroupSummary(BaseModel):
-    speakers: list[str]
-    themes: list[str] = Field(min_length=1, max_length=6)
-    overall_sentiment: Literal["positive", "negative", "mixed"]
-
-
-# ══════════════════════════════════════════════════════════
-# Раунд 5 — LLM-as-judge
-# ══════════════════════════════════════════════════════════
 class ActionVerdict(BaseModel):
-    action: str
-    support: Literal["supported", "weakly_supported", "not_supported"]
+    """Вердикт судьи по action item"""
+    action_item: str
+    support: ClaimSupport
     evidence: list[str] = Field(default_factory=list)
     comment: str
 
 
 class JudgeReport(BaseModel):
-    verdicts: list[ActionVerdict]
-    overall_score: float = Field(ge=0, le=1)
+    """Отчёт судьи"""
+    verdicts: list[ActionVerdict] = Field(min_length=1)
+    overall_score: float = Field(ge=0.0, le=1.0)
     summary: str
+    weak_points: list[str] = Field(default_factory=list)
 
 
-# ══════════════════════════════════════════════════════════
-# Раунд 7 — Multi-doc сводка
-# ══════════════════════════════════════════════════════════
+class SourceDocSummary(BaseModel):
+    """Сводка по одному источнику (для multi-doc)"""
+    source_id: str
+    interview_count: int = Field(ge=1)
+    dominant_aspects: list[AspectName] = Field(min_length=1)
+    recurring_claims: list[str] = Field(min_length=2)
+    notable_quotes: list[str] = Field(default_factory=list)
+
+
 class MultiDocSummary(BaseModel):
-    common_themes: list[str] = Field(min_length=1, max_length=8)
-    unique_per_bank: dict[str, list[str]]
-    overall_headline: str
+    """Консолидация нескольких источников"""
+    cross_source_patterns: list[str] = Field(min_length=3)
+    source_specific_findings: list[str] = Field(min_length=2)
+    consolidated_actions: list[str] = Field(min_length=2, max_length=6)
+    confidence: float = Field(ge=0.0, le=1.0)
