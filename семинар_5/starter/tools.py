@@ -284,8 +284,153 @@ def calculate(expression: str) -> dict:
     if not isinstance(expression, str) or not expression.strip():
         return {"error": "пустое выражение"}
 
+    # Белый список разрешённых функций и констант
+    allowed_names = {
+        'log': sympy.log,
+        'ln': sympy.log,
+        'sqrt': sympy.sqrt,
+        'exp': sympy.exp,
+        'sin': sympy.sin,
+        'cos': sympy.cos,
+        'tan': sympy.tan,
+        'abs': sympy.Abs,
+        'pi': sympy.pi,
+        'e': sympy.E,
+    }
+
     try:
-        val = float(sympy.sympify(expression.replace("^", "**")))
-        return {"expression": expression, "result": round(val, 6)}
+        # Заменяем ^ на ** для степени
+        expr = expression.replace('^', '**')
+        
+        # Парсим выражение с ограниченными именами
+        parsed = sympy.sympify(expr, locals=allowed_names)
+        
+        # Проверяем, что нет неизвестных символов
+        if parsed.free_symbols:
+            return {"error": f"Неизвестные переменные: {parsed.free_symbols}"}
+        
+        # Вычисляем численно
+        result = float(parsed.evalf())
+        
+        return {
+            "expression": expression,
+            "result": round(result, 6)
+        }
+    except (TypeError, ValueError, SyntaxError, sympy.SympifyError) as e:
+        return {"error": f"Ошибка вычисления: {e}"}
     except Exception as e:
         return {"error": f"{type(e).__name__}: {e}"}
+
+
+# ===========================================================================
+# 5. Сравнение периодов
+# ===========================================================================
+
+
+def compare_periods(metric: str, period_a: str, period_b: str) -> dict:
+    """
+    Сравнить значение метрики в двух периодах.
+    
+    Args:
+        metric: "key_rate" | "fx_USD" | "fx_EUR" | "fx_CNY" | "cpi" | "unemployment"
+        period_a: "YYYY-MM" или "YYYY-MM-DD"
+        period_b: "YYYY-MM" или "YYYY-MM-DD"
+    
+    Returns:
+        dict с результатами сравнения:
+        {
+            "metric": "...",
+            "a": {"date": "...", "value": ...},
+            "b": {"date": "...", "value": ...},
+            "delta": b.value - a.value,
+            "ratio": b.value / a.value,
+            "source": "..."
+        }
+    """
+    from calendar import monthrange
+    
+    # Парсим метрику
+    if metric.startswith("fx_"):
+        currency = metric.replace("fx_", "")
+        metric_type = "fx"
+    else:
+        metric_type = metric
+        currency = None
+    
+    # Функция для получения значения по периоду
+    def get_value(period: str):
+        # Определяем тип периода (месяц или день)
+        if len(period) == 7:  # YYYY-MM
+            year, month = map(int, period.split('-'))
+            
+            if metric_type == "cpi":
+                res = get_inflation(year, month)
+                return res.get("cpi_yoy"), res.get("date", period), res.get("source")
+            
+            elif metric_type == "unemployment":
+                res = get_unemployment(year, month)
+                return res.get("unemployment"), res.get("date", period), res.get("source")
+            
+            elif metric_type == "key_rate":
+                # Для ключевой ставки берем последний день месяца
+                last_day = monthrange(year, month)[1]
+                d = _date(year, month, last_day)
+                res = get_key_rate(d.isoformat())
+                return res.get("rate"), res.get("date", period), res.get("source")
+            
+            elif metric_type == "fx" and currency:
+                # Для валюты нужен конкретный день, берем последний день месяца
+                last_day = monthrange(year, month)[1]
+                d = _date(year, month, last_day)
+                res = get_fx_rate(currency, d.isoformat())
+                return res.get("rate"), res.get("date", period), res.get("source")
+            
+            else:
+                return None, period, None
+        
+        else:  # YYYY-MM-DD
+            if metric_type == "cpi":
+                year, month = map(int, period.split('-')[:2])
+                res = get_inflation(year, month)
+                return res.get("cpi_yoy"), res.get("date", period), res.get("source")
+            
+            elif metric_type == "unemployment":
+                year, month = map(int, period.split('-')[:2])
+                res = get_unemployment(year, month)
+                return res.get("unemployment"), res.get("date", period), res.get("source")
+            
+            elif metric_type == "key_rate":
+                res = get_key_rate(period)
+                return res.get("rate"), res.get("date", period), res.get("source")
+            
+            elif metric_type == "fx" and currency:
+                res = get_fx_rate(currency, period)
+                return res.get("rate"), res.get("date", period), res.get("source")
+            
+            else:
+                return None, period, None
+    
+    # Получаем значения
+    val_a, date_a, source_a = get_value(period_a)
+    val_b, date_b, source_b = get_value(period_b)
+    
+    if val_a is None or val_b is None:
+        return {
+            "error": f"Не удалось получить данные для {metric} в периодах {period_a} или {period_b}",
+            "metric": metric,
+            "period_a": period_a,
+            "period_b": period_b
+        }
+    
+    # Вычисляем разницу и отношение
+    delta = val_b - val_a
+    ratio = val_b / val_a if val_a != 0 else None
+    
+    return {
+        "metric": metric,
+        "a": {"date": date_a, "value": val_a},
+        "b": {"date": date_b, "value": val_b},
+        "delta": round(delta, 4),
+        "ratio": round(ratio, 4) if ratio is not None else None,
+        "source": f"{source_a}/{source_b}"
+    }

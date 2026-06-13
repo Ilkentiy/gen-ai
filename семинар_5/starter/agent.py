@@ -7,11 +7,13 @@
   блок 8    — самопроверка перед ответом (флаг --critic).
   блок 9    — кэш детерминированных инструментов (флаг --cache).
   блок 10   — учёт токенов и стоимости (флаг --cost).
+  блок 11 — логирование в JSONL (флаг --log-trace).
 
 Запуск:
     python agent.py "Какая реальная ключевая ставка сейчас?"
     python agent.py --parallel --structured --critic "Сравни курс USD сегодня и 2 января 2022"
     python agent.py --cost "Что сейчас выше: ключевая ставка или индекс нищеты?"
+    python agent.py --log-trace "Сколько стоит доллар?"
 
 """
 
@@ -21,6 +23,7 @@ import argparse
 import datetime
 import json
 import sys
+import uuid
 from concurrent.futures import ThreadPoolExecutor
 from json.decoder import JSONDecodeError
 from pathlib import Path
@@ -32,7 +35,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from llm_client import get_model, make_client, make_raw_client
 from schemas import TOOL_SCHEMAS
-from tools import calculate, get_fx_rate, get_inflation, get_key_rate, get_unemployment
+from tools import (
+    calculate,
+    compare_periods,
+    get_fx_rate,
+    get_inflation,
+    get_key_rate,
+    get_unemployment,
+)
 
 # набор инструментов
 TOOLS_IMPL = {
@@ -40,9 +50,9 @@ TOOLS_IMPL = {
     "get_key_rate": get_key_rate,
     "get_inflation": get_inflation,
     "get_unemployment": get_unemployment,
+    "compare_periods": compare_periods,
     "calculate": calculate,
 }
-
 
 # блок 7 — структурированный ответ
 class AgentAnswer(BaseModel):
@@ -73,7 +83,6 @@ SUBMIT_SCHEMA = {
     },
 }
 
-
 # блок 8 — самопроверка
 class CriticVerdict(BaseModel):
     ok: bool
@@ -85,7 +94,6 @@ CRITIC_SYSTEM = """Ты — придирчивый ревизор. Тебе да
 инструментов, без выдумки. ok=false, если число не подтверждается логом или
 арифметика не сходится. issue — одна фраза, что не так."""
 
-
 # блок 9 — кэш детерминированных инструментов (живёт в пределах процесса).
 TOOL_CACHE: dict[str, dict] = {}
 CACHE_STATS = {"hits": 0, "misses": 0}
@@ -94,16 +102,47 @@ CACHE_STATS = {"hits": 0, "misses": 0}
 PRICE_IN_PER_MTOK = 0.14
 PRICE_OUT_PER_MTOK = 0.28
 
+# блок 11 — логирование в JSONL
+TRACE_FILE = Path(__file__).parent / "trace.jsonl"
+RUN_ID = None
+
+
+def _get_run_id() -> str:
+    """Получить или создать run_id для сессии логирования"""
+    global RUN_ID
+    if RUN_ID is None:
+        RUN_ID = str(uuid.uuid4())
+    return RUN_ID
+
+
+def log_step(step: int, call: str = None, args: dict = None, obs: dict = None, final: str = None):
+    """Записать шаг в JSONL лог"""
+    entry = {
+        "run_id": _get_run_id(),
+        "ts": datetime.datetime.now().isoformat(),
+        "step": step
+    }
+    if call:
+        entry["call"] = call
+        entry["args"] = args or {}
+        entry["obs"] = obs or {}
+    if final:
+        entry["final"] = final
+    
+    with open(TRACE_FILE, "a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
 
 _BASE_RULES = """\
-Ты — макроэкономический аналитик с данными Цб РФ и Росстата. ЧИСЛА НИКОГДА НЕ
+Ты — макроэкономический аналитик с данными ЦБ РФ и Росстата. ЧИСЛА НИКОГДА НЕ
 ПРИДУМЫВАЙ — получай их через инструменты.
 
 Инструменты:
 - get_fx_rate: курс валюты к рублю на дату
-- get_key_rate: ключевая ставка Цб на дату
+- get_key_rate: ключевая ставка ЦБ на дату
 - get_inflation: ИПЦ (% г/г) на конец месяца
 - get_unemployment: безработица (% рабочей силы) на конец месяца
+- compare_periods: сравнить значение метрики в двух периодах (delta, ratio)
 - calculate: безопасный калькулятор для арифметики над полученными числами
 
 Алгоритм:
@@ -115,14 +154,16 @@ _BASE_RULES = """\
 5. Индекс нищеты = инфляция г/г + безработица.
 6. Кросс-курс «сколько B за 1 A» = (рублей за 1 A) / (рублей за 1 B).
    Пример: «юаней за доллар» = (рублей за доллар) / (рублей за юань).
+7. Для сравнения метрик в разных периодах используй compare_periods — он сам
+   вызовет нужные инструменты и посчитает разницу и отношение.
 """
 
 SYSTEM_PROMPT = (
     _BASE_RULES
     + """\
-7. Когда данных достаточно — выдай финальный ответ обычным текстом бЕЗ вызовов
+8. Когда данных достаточно — выдай финальный ответ обычным текстом БЕЗ вызовов
    инструментов. Одна-две фразы, с числами и единицами. Если число из
-   fallback_csv — оговорись, что Цб в моменте недоступен.
+   fallback_csv — оговорись, что ЦБ в моменте недоступен.
 Формат даты — YYYY-MM-DD.
 Текущая дата: {}
 """.format(datetime.datetime.now().strftime("%Y-%m-%d"))
@@ -131,10 +172,11 @@ SYSTEM_PROMPT = (
 SYSTEM_PROMPT_PRO = (
     _BASE_RULES
     + """\
-7. Когда данных достаточно — НЕ пиши текст, а вызови submit_answer со структурой
+8. Когда данных достаточно — НЕ пиши текст, а вызови submit_answer со структурой
    (answer, value, unit, sources, confidence).
 Формат даты — YYYY-MM-DD.
-"""
+Текущая дата: {}
+""".format(datetime.datetime.now().strftime("%Y-%m-%d"))
 )
 
 
@@ -207,8 +249,7 @@ def _finish(
     verbose: bool,
 ) -> dict:
     """Прикрепить к результату учёт токенов/стоимости (блок 10) и статистику
-    кэша (блок 9); по флагам — распечатать. Этот код готов; чтобы таблица
-    стоимости заполнилась, надо заполнить usage_log в run_agent (блок 10)."""
+    кэша (блок 9); по флагам — распечатать."""
     total_in = sum(u["prompt_tokens"] for u in usage_log)
     total_out = sum(u["completion_tokens"] for u in usage_log)
     total_cost = round(sum(u["cost_usd"] for u in usage_log), 6)
@@ -249,9 +290,18 @@ def run_agent(
     use_critic: bool = False,
     use_cache: bool = False,
     track_cost: bool = False,
+    log_trace: bool = False,
     verbose: bool = True,
 ) -> dict[str, Any]:
     """ReAct-цикл. базовый режим — финал текстом; флаги включают блоки 6-10."""
+    global RUN_ID
+    if log_trace:
+        RUN_ID = str(uuid.uuid4())
+        # Очищаем старый лог для нового run_id
+        if TRACE_FILE.exists():
+            # Не очищаем, просто пишем в конец с новым run_id
+            pass
+    
     client = make_raw_client()
     model = get_model()
     tools = TOOL_SCHEMAS + ([SUBMIT_SCHEMA] if structured else [])
@@ -294,6 +344,9 @@ def run_agent(
             print(f"[step {step}] {names or 'финал-текст'}")
 
         if not msg.tool_calls:
+            # блок домашки — логируем финальный ответ
+            if log_trace:
+                log_step(step, final=msg.content)
             trace.append({"step": step, "final": msg.content})
             return _finish(
                 {
@@ -331,12 +384,15 @@ def run_agent(
                 trace.append(
                     {"step": step, "call": tc.function.name, "args": args, "obs": obs}
                 )
+                # блок домашки — логируем вызов инструмента
+                if log_trace:
+                    log_step(step, call=tc.function.name, args=args, obs=obs)
                 if verbose:
                     print(
                         f"    {tc.function.name}({args}) -> {json.dumps(obs, ensure_ascii=False)[:140]}"
                     )
 
-        # блок 7 + 8 — финал через submit_answer и самопроверку
+        # блок 7 + 8 — финал через submit_answer и самопроверка
         if submit is not None:
             try:
                 ans = AgentAnswer(**json.loads(submit.function.arguments or "{}"))
@@ -366,6 +422,9 @@ def run_agent(
             messages.append(
                 {"role": "tool", "tool_call_id": submit.id, "content": "ответ принят"}
             )
+            # блок домашки — логируем структурированный ответ
+            if log_trace:
+                log_step(step, call="submit_answer", args=ans.dict(), obs={"status": "accepted"})
             return _finish(
                 {
                     "answer": ans.answer,
@@ -379,6 +438,10 @@ def run_agent(
                 verbose=verbose,
             )
 
+    # Если дошли сюда — превышен лимит шагов
+    if log_trace:
+        log_step(max_iter, final=f"ERROR: исчерпан лимит шагов max_iter={max_iter}")
+    
     return _finish(
         {
             "answer": None,
@@ -424,7 +487,12 @@ def main():
         action="store_true",
         help="блок 10: показать токены и стоимость по шагам",
     )
-    ap.add_argument("--trace", type=Path, default=None, help="Куда сохранить JSON-лог")
+    ap.add_argument(
+        "--log-trace",
+        action="store_true",
+        help="блок домашки: логировать шаги в trace.jsonl",
+    )
+    ap.add_argument("--trace", type=Path, default=None, help="Куда сохранить JSON-лог (устарело, используйте --log-trace)")
     a = ap.parse_args()
 
     q = " ".join(a.query)
@@ -437,6 +505,7 @@ def main():
         use_critic=a.critic,
         use_cache=a.cache,
         track_cost=a.cost,
+        log_trace=a.log_trace,
     )
 
     print("\n=== ВОПРОС ===")
@@ -451,6 +520,9 @@ def main():
     else:
         print(res.get("answer") or res.get("error"))
     print(f"\n(шагов: {res['steps']})")
+    
+    if a.log_trace:
+        print(f"\n(лог шагов сохранён в {TRACE_FILE}, run_id={_get_run_id()})")
 
 
 if __name__ == "__main__":
