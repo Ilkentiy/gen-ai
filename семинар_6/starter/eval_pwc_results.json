@@ -2,8 +2,10 @@
   {
     "id": "Q1",
     "query": "Во сколько раз USD подорожал с 1 января 2022 по сегодня?",
-    "comment": "Класс ошибки C: одиночный часто считает в уме, не зовёт calculate. PWC должен починить — Planner обязан добавить calculate-подвопрос.",
-    "n": 1,
+    "comment": "Класс ошибки C: одиночный часто считает в уме, не зовёт calculate. PWC должен починить — Планировщик обязан добавить calculate-подвопрос.",
+    "n": 3,
+    "validate": true,
+    "parallel": true,
     "single": {
       "runs": [
         {
@@ -15,10 +17,32 @@
           "hallucinated": [],
           "must_have_ok": true,
           "arith_without_calc": false,
-          "answer_preview": "Курс доллара США **не подорожал, а подешевел** за этот период.\n\nНа 1 января 2022 года курс USD составлял **74,29 ₽**, а на сегодня (15 июня 2026) — **71,91 ₽**. Таким образом, долл"
+          "answer_preview": "USD **не подорожал**, а **подешевел** по отношению к рублю. \n\nКурс на 1 января 2022 года составлял **74,29 ₽**, а на сегодня (ближайшая доступная дата от ЦБ — 16 июня 2026 года) — "
+        },
+        {
+          "ok": true,
+          "used_tools": [
+            "calculate",
+            "get_fx_rate"
+          ],
+          "hallucinated": [],
+          "must_have_ok": true,
+          "arith_without_calc": false,
+          "answer_preview": "USD **не подорожал**, а наоборот — подешевел относительно рубля. \n\nС 1 января 2022 года (курс 74,29 руб./$) по сегодняшний день (72,45 руб./$) доллар потерял в цене примерно **в 1,"
+        },
+        {
+          "ok": true,
+          "used_tools": [
+            "calculate",
+            "get_fx_rate"
+          ],
+          "hallucinated": [],
+          "must_have_ok": true,
+          "arith_without_calc": false,
+          "answer_preview": "Курс USD на **1 января 2022 года** составлял **74,29 ₽**, а сегодня (16 июня 2026 года) — **72,45 ₽**. Таким образом, доллар **не подорожал**, а напротив, **подешевел** примерно в "
         }
       ],
-      "pass": 1
+      "pass": 3
     },
     "pwc": {
       "runs": [
@@ -36,17 +60,51 @@
           "hallucinated_in_plan": [],
           "must_have_ok": false,
           "iterations": 1,
-          "answer_preview": "Курс USD на 1 января 2022 года (официальный курс ЦБ РФ) составлял **74,2926 рубля** за 1 доллар. · Курс доллара США к рублю на сегодня, 15 июня 2026 года, составляет **71,91 руб./$"
+          "answer_preview": "Доллар США не подорожал, а подешевел: его курс снизился с 74,29 руб./USD на 1 января 2022 года до 72,45 руб./USD на 16 июня 2026 года, что составляет 0,975 от исходного курса, то е"
+        },
+        {
+          "ok": true,
+          "used_tools": [
+            "calculate",
+            "get_fx_rate"
+          ],
+          "plan_tools": [
+            "calculate",
+            "get_fx_rate"
+          ],
+          "hallucinated_in_workers": [],
+          "hallucinated_in_plan": [],
+          "must_have_ok": true,
+          "iterations": 1,
+          "answer_preview": "Курс USD снизился: на 16 июня 2026 года он составляет 72,45 рубля против 74,29 рубля на 1 января 2022 года, то есть доллар подешевел примерно в 0,975 раза (на 2,5%)."
+        },
+        {
+          "ok": false,
+          "used_tools": [
+            "calculate",
+            "get_fx_rate"
+          ],
+          "plan_tools": [
+            "calculate",
+            "get_fx_rate"
+          ],
+          "hallucinated_in_workers": [],
+          "hallucinated_in_plan": [],
+          "must_have_ok": false,
+          "iterations": 1,
+          "answer_preview": "С 1 января 2022 года (курс 74,29 руб.) по 16 июня 2026 года (курс 72,45 руб.) доллар не подорожал, а подешевел до 0,975 раза от начального значения, то есть примерно на 2,5%."
         }
       ],
-      "pass": 0
+      "pass": 1
     }
   },
   {
     "id": "Q2",
     "query": "Какая сейчас реальная ключевая ставка, если инфляцию брать по последнему доступному месяцу, а не по году?",
     "comment": "Класс ошибки B: одиночный не умеет искать «последний доступный» месяц, зацикливается. PWC должен разбить на шаги.",
-    "n": 1,
+    "n": 3,
+    "validate": true,
+    "parallel": true,
     "single": {
       "runs": [
         {
@@ -59,13 +117,73 @@
           "hallucinated": [],
           "must_have_ok": true,
           "arith_without_calc": false,
-          "answer_preview": "Готово. Вот итоговый ответ:\n\n**Реальная ключевая ставка сейчас составляет ≈ 5,77% годовых.**\n\nРасчёт: 16,0% (ключевая ставка) − 10,23% (инфляция за апрель 2025, % г/г).\n\n⚠️ Небольш"
+          "answer_preview": "**Реальная ключевая ставка на текущий момент составляет ≈ 9,2% годовых.**\n\nРасчёт:  \n- Ключевая ставка ЦБ — **16,0%** (данные из локального архива, сайт ЦБ в моменте недоступен).  "
+        },
+        {
+          "ok": true,
+          "used_tools": [
+            "calculate",
+            "get_inflation",
+            "get_key_rate"
+          ],
+          "hallucinated": [],
+          "must_have_ok": true,
+          "arith_without_calc": false,
+          "answer_preview": "Итак, ключевая ставка ЦБ на сегодня (16 июня 2026) составляет **16,0%** годовых. Последний доступный месяц по инфляции — **март 2026 г.**, где ИПЦ составил **6,8%** г/г. Вычитаем:\n"
+        },
+        {
+          "ok": true,
+          "used_tools": [
+            "calculate",
+            "get_inflation",
+            "get_key_rate"
+          ],
+          "hallucinated": [],
+          "must_have_ok": true,
+          "arith_without_calc": false,
+          "answer_preview": "На сегодня **реальная ключевая ставка** (с учётом инфляции за последний доступный месяц — май 2025) составляет **~6,13% годовых**.\n\n*Расчёт:* 16,00% (ключевая ставка¹) − 9,87% (инф"
         }
       ],
-      "pass": 1
+      "pass": 3
     },
     "pwc": {
       "runs": [
+        {
+          "ok": false,
+          "used_tools": [
+            "calculate",
+            "get_inflation",
+            "get_key_rate"
+          ],
+          "plan_tools": [
+            "calculate",
+            "get_inflation",
+            "get_key_rate"
+          ],
+          "hallucinated_in_workers": [],
+          "hallucinated_in_plan": [],
+          "must_have_ok": false,
+          "iterations": 3,
+          "answer_preview": ""
+        },
+        {
+          "ok": true,
+          "used_tools": [
+            "calculate",
+            "get_inflation",
+            "get_key_rate"
+          ],
+          "plan_tools": [
+            "calculate",
+            "get_inflation",
+            "get_key_rate"
+          ],
+          "hallucinated_in_workers": [],
+          "hallucinated_in_plan": [],
+          "must_have_ok": true,
+          "iterations": 2,
+          "answer_preview": "Реальная ключевая ставка, рассчитанная как разница между текущей ключевой ставкой ЦБ (16,00% годовых) и инфляцией за апрель 2025 года (10,23% г/г), составляет 5,77% годовых."
+        },
         {
           "ok": false,
           "used_tools": [],
@@ -77,16 +195,39 @@
           "answer_preview": ""
         }
       ],
-      "pass": 0
+      "pass": 1
     }
   },
   {
     "id": "Q3",
     "query": "Какова накопленная инфляция с января 2022 по март 2026? Рассчитай как произведение всех (1 + ипц_м/100) по месяцам.",
-    "comment": "Класс ошибки D (граница паттерна): требует get_inflation за много месяцев + большое calculate-выражение. Одиночный галлюцинирует get_cumulative_inflation; PWC обычно тоже (Planner может добавить фейк-tool в план). Это — повод для Schema-Validator в домашке.",
-    "n": 1,
+    "comment": "Класс ошибки D (граница паттерна): требует get_inflation за много месяцев + большое calculate-выражение. Одиночный галлюцинирует get_cumulative_inflation; PWC обычно тоже (Планировщик может добавить выдуманный инструмент в план). Это — повод для Schema-Validator в домашке.",
+    "n": 3,
+    "validate": true,
+    "parallel": true,
     "single": {
       "runs": [
+        {
+          "ok": false,
+          "used_tools": [
+            "get_inflation"
+          ],
+          "hallucinated": [],
+          "must_have_ok": true,
+          "arith_without_calc": true,
+          "answer_preview": "У меня нет инструмента для получения **помесячной** инфляции (месяц к предыдущему месяцу). Функция `get_inflation` возвращает **годовую** инфляцию (% г/г) — прирост цен за 12 месяц"
+        },
+        {
+          "ok": false,
+          "used_tools": [
+            "calculate",
+            "get_inflation"
+          ],
+          "hallucinated": [],
+          "must_have_ok": false,
+          "arith_without_calc": false,
+          "answer_preview": ""
+        },
         {
           "ok": false,
           "used_tools": [
@@ -112,6 +253,304 @@
           "must_have_ok": false,
           "iterations": 3,
           "answer_preview": ""
+        },
+        {
+          "ok": false,
+          "used_tools": [],
+          "plan_tools": [],
+          "hallucinated_in_workers": [],
+          "hallucinated_in_plan": [],
+          "must_have_ok": false,
+          "iterations": 3,
+          "answer_preview": ""
+        },
+        {
+          "ok": false,
+          "used_tools": [],
+          "plan_tools": [],
+          "hallucinated_in_workers": [],
+          "hallucinated_in_plan": [],
+          "must_have_ok": false,
+          "iterations": 3,
+          "answer_preview": ""
+        }
+      ],
+      "pass": 0
+    }
+  },
+  {
+    "id": "Q4",
+    "query": "Какой курс USD на 1 января 2023 и курс EUR на 1 января 2023?",
+    "comment": "Параллельный вопрос: два независимых get_fx_rate",
+    "n": 3,
+    "validate": true,
+    "parallel": true,
+    "single": {
+      "runs": [
+        {
+          "ok": true,
+          "used_tools": [
+            "get_fx_rate"
+          ],
+          "hallucinated": [],
+          "must_have_ok": true,
+          "arith_without_calc": false,
+          "answer_preview": "**Курсы на 1 января 2023 года:**\n\n- **USD/RUB** — **70,3375 ₽** за 1 доллар США\n- **EUR/RUB** — **75,6553 ₽** за 1 евро\n\nДанные получены с сайта ЦБ РФ (cbr.ru)."
+        },
+        {
+          "ok": true,
+          "used_tools": [
+            "get_fx_rate"
+          ],
+          "hallucinated": [],
+          "must_have_ok": true,
+          "arith_without_calc": false,
+          "answer_preview": "На **1 января 2023 года** официальные курсы ЦБ РФ составляли:\n\n- **USD** — **70,3375 ₽** за доллар\n- **EUR** — **75,6553 ₽** за евро"
+        },
+        {
+          "ok": true,
+          "used_tools": [
+            "get_fx_rate"
+          ],
+          "hallucinated": [],
+          "must_have_ok": true,
+          "arith_without_calc": false,
+          "answer_preview": "Официальные курсы ЦБ РФ на **1 января 2023 года**:\n\n- **USD**: **70,3375 ₽** за 1 доллар США\n- **EUR**: **75,6553 ₽** за 1 евро"
+        }
+      ],
+      "pass": 3
+    },
+    "pwc": {
+      "runs": [
+        {
+          "ok": true,
+          "used_tools": [
+            "get_fx_rate"
+          ],
+          "plan_tools": [
+            "get_fx_rate"
+          ],
+          "hallucinated_in_workers": [],
+          "hallucinated_in_plan": [],
+          "must_have_ok": true,
+          "iterations": 1,
+          "answer_preview": "На 1 января 2023 года курс USD составил 70,3375 ₽ за 1 USD, а курс EUR — 75,66 ₽ за 1 EUR (официальные курсы ЦБ РФ)."
+        },
+        {
+          "ok": true,
+          "used_tools": [
+            "get_fx_rate"
+          ],
+          "plan_tools": [
+            "get_fx_rate"
+          ],
+          "hallucinated_in_workers": [],
+          "hallucinated_in_plan": [],
+          "must_have_ok": true,
+          "iterations": 1,
+          "answer_preview": "На 1 января 2023 года курс USD составлял 70,3375 рубля, а курс EUR — 75,6553 рубля."
+        },
+        {
+          "ok": true,
+          "used_tools": [
+            "get_fx_rate"
+          ],
+          "plan_tools": [
+            "get_fx_rate"
+          ],
+          "hallucinated_in_workers": [],
+          "hallucinated_in_plan": [],
+          "must_have_ok": true,
+          "iterations": 1,
+          "answer_preview": "Курс USD на 1 января 2023 составлял 70,3375 рубля за доллар, а курс EUR — 75,6553 рубля за евро."
+        }
+      ],
+      "pass": 3
+    }
+  },
+  {
+    "id": "Q5",
+    "query": "Какая инфляция была в декабре 2023?",
+    "comment": "Простой вопрос на get_inflation",
+    "n": 3,
+    "validate": true,
+    "parallel": true,
+    "single": {
+      "runs": [
+        {
+          "ok": true,
+          "used_tools": [
+            "get_inflation"
+          ],
+          "hallucinated": [],
+          "must_have_ok": true,
+          "arith_without_calc": false,
+          "answer_preview": "Инфляция в декабре 2023 года составила **7,42%** в годовом выражении (декабрь 2023 к декабрю 2022)."
+        },
+        {
+          "ok": true,
+          "used_tools": [
+            "get_inflation"
+          ],
+          "hallucinated": [],
+          "must_have_ok": true,
+          "arith_without_calc": false,
+          "answer_preview": "Инфляция (ИПЦ, % г/г) в декабре 2023 года составила **7,42%**. Данные получены из архива Росстата."
+        },
+        {
+          "ok": true,
+          "used_tools": [
+            "get_inflation"
+          ],
+          "hallucinated": [],
+          "must_have_ok": true,
+          "arith_without_calc": false,
+          "answer_preview": "По данным Росстата, инфляция в декабре 2023 года составила **7,42%** в годовом выражении (г/г)."
+        }
+      ],
+      "pass": 3
+    },
+    "pwc": {
+      "runs": [
+        {
+          "ok": true,
+          "used_tools": [
+            "get_inflation"
+          ],
+          "plan_tools": [
+            "get_inflation"
+          ],
+          "hallucinated_in_workers": [],
+          "hallucinated_in_plan": [],
+          "must_have_ok": true,
+          "iterations": 1,
+          "answer_preview": "В декабре 2023 года инфляция (ИПЦ, % г/г) составила 7,42%."
+        },
+        {
+          "ok": true,
+          "used_tools": [
+            "get_inflation"
+          ],
+          "plan_tools": [
+            "get_inflation"
+          ],
+          "hallucinated_in_workers": [],
+          "hallucinated_in_plan": [],
+          "must_have_ok": true,
+          "iterations": 1,
+          "answer_preview": "В декабре 2023 года годовая инфляция (ИПЦ, % г/г) составила 7,42% согласно данным Росстата."
+        },
+        {
+          "ok": true,
+          "used_tools": [
+            "get_inflation"
+          ],
+          "plan_tools": [
+            "get_inflation"
+          ],
+          "hallucinated_in_workers": [],
+          "hallucinated_in_plan": [],
+          "must_have_ok": true,
+          "iterations": 1,
+          "answer_preview": "Инфляция в декабре 2023 года (ИПЦ, % г/г) составила 7,42%."
+        }
+      ],
+      "pass": 3
+    }
+  },
+  {
+    "id": "Q6",
+    "query": "Сравни курс USD и EUR к рублю на сегодня. Какая валюта дороже?",
+    "comment": "Вопрос с параллельностью и арифметикой",
+    "n": 3,
+    "validate": true,
+    "parallel": true,
+    "single": {
+      "runs": [
+        {
+          "ok": true,
+          "used_tools": [
+            "get_fx_rate"
+          ],
+          "hallucinated": [],
+          "must_have_ok": true,
+          "arith_without_calc": false,
+          "answer_preview": "**Курсы ЦБ РФ на сегодня (16 июня 2026 года):**\n\n- 🇺🇸 **USD** — **72,45 ₽** за 1 доллар\n- 🇪🇺 **EUR** — **83,80 ₽** за 1 евро\n\nЕвро дороже доллара — на **11,35 рубля** (83,80 ₽ прот"
+        },
+        {
+          "ok": true,
+          "used_tools": [
+            "calculate",
+            "get_fx_rate"
+          ],
+          "hallucinated": [],
+          "must_have_ok": true,
+          "arith_without_calc": false,
+          "answer_preview": "По данным ЦБ РФ на **16 июня 2026 года**:\n\n| Валюта | Курс к рублю |\n|--------|-------------|\n| **USD** | **72,45 ₽** |\n| **EUR** | **83,80 ₽** |\n\n**Евро дороже доллара** — один ев"
+        },
+        {
+          "ok": true,
+          "used_tools": [
+            "calculate",
+            "get_fx_rate"
+          ],
+          "hallucinated": [],
+          "must_have_ok": true,
+          "arith_without_calc": false,
+          "answer_preview": "На сегодня (16 июня 2026 года) курс **EUR** составляет **83,80 ₽**, а курс **USD** — **72,45 ₽**. Таким образом, **евро дороже доллара на 11,35 рубля** за единицу."
+        }
+      ],
+      "pass": 3
+    },
+    "pwc": {
+      "runs": [
+        {
+          "ok": false,
+          "used_tools": [
+            "calculate",
+            "get_fx_rate"
+          ],
+          "plan_tools": [
+            "calculate",
+            "get_fx_rate"
+          ],
+          "hallucinated_in_workers": [],
+          "hallucinated_in_plan": [],
+          "must_have_ok": false,
+          "iterations": 2,
+          "answer_preview": "На сегодня, 16 июня 2026 года, курс доллара США к рублю составляет 72,45 рубля, а курс евро — 83,80 рубля. Таким образом, евро дороже доллара на 11,35 рубля."
+        },
+        {
+          "ok": false,
+          "used_tools": [
+            "calculate",
+            "get_fx_rate"
+          ],
+          "plan_tools": [
+            "calculate",
+            "get_fx_rate"
+          ],
+          "hallucinated_in_workers": [],
+          "hallucinated_in_plan": [],
+          "must_have_ok": false,
+          "iterations": 1,
+          "answer_preview": "На сегодня, 16 июня 2026 года, курс евро (83,80 руб.) на 11,35 рубля выше курса доллара (72,45 руб.), поэтому евро дороже."
+        },
+        {
+          "ok": false,
+          "used_tools": [
+            "calculate",
+            "get_fx_rate"
+          ],
+          "plan_tools": [
+            "calculate",
+            "get_fx_rate"
+          ],
+          "hallucinated_in_workers": [],
+          "hallucinated_in_plan": [],
+          "must_have_ok": false,
+          "iterations": 1,
+          "answer_preview": "Сегодня, 16 июня 2026 года, курс евро составляет 83,80 рубля, что на 11,35 рубля выше курса доллара (72,45 рубля). Таким образом, евро дороже доллара."
         }
       ],
       "pass": 0

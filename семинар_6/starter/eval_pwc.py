@@ -1,5 +1,5 @@
 """
-Eval мульти-агента: 3 вопроса, на которых одиночный агент С5 ломается.
+Eval мульти-агента: 6 вопросов, на которых одиночный агент С5 ломается.
 
 Каждый вопрос прогоняется дважды:
   1) через одиночного агента С5 (agent_s5.run_agent)
@@ -13,8 +13,11 @@ Eval мульти-агента: 3 вопроса, на которых одино
 Прогон N=5 раз, считаем долю успешных прогонов. Результат пишется в eval_pwc_results.json.
 
 Запуск:
-    python eval_pwc.py           # полный прогон
-    python eval_pwc.py --single  # только один прогон каждого, быстрая проверка
+    python eval_pwc.py                    # полный прогон с валидатором и параллельно
+    python eval_pwc.py --single           # только один прогон каждого, быстрая проверка
+    python eval_pwc.py --no-validate      # отключить валидатор
+    python eval_pwc.py --sequential       # последовательное исполнение (без параллельности)
+    python eval_pwc.py --no-validate --sequential  # без валидатора и без параллельности
 """
 from __future__ import annotations
 
@@ -69,6 +72,30 @@ CASES = [
         ),
         "expected_tools_pwc": {"get_inflation", "calculate"},
         "must_have_keywords": ["%"],
+        "forbid_hallucinated_tools": True,
+    },
+    {
+        "id": "Q4",
+        "query": "Какой курс USD на 1 января 2023 и курс EUR на 1 января 2023?",
+        "comment": "Параллельный вопрос: два независимых get_fx_rate",
+        "expected_tools_pwc": {"get_fx_rate"},
+        "must_have_keywords": ["USD", "EUR"],
+        "forbid_hallucinated_tools": True,
+    },
+    {
+        "id": "Q5",
+        "query": "Какая инфляция была в декабре 2023?",
+        "comment": "Простой вопрос на get_inflation",
+        "expected_tools_pwc": {"get_inflation"},
+        "must_have_keywords": ["%"],
+        "forbid_hallucinated_tools": True,
+    },
+    {
+        "id": "Q6",
+        "query": "Сравни курс USD и EUR к рублю на сегодня. Какая валюта дороже?",
+        "comment": "Вопрос с параллельностью и арифметикой",
+        "expected_tools_pwc": {"get_fx_rate", "calculate"},
+        "must_have_keywords": ["USD", "EUR", "дороже"],
         "forbid_hallucinated_tools": True,
     },
 ]
@@ -134,7 +161,13 @@ def _check_pwc(case: dict, result: dict) -> dict:
     }
 
 
-def run_case(case: dict, *, n: int = 5) -> dict:
+def run_case(
+    case: dict, 
+    *, 
+    n: int = 5,
+    validate: bool = True,
+    parallel: bool = True,
+) -> dict:
     single = {"runs": [], "pass": 0}
     pwc = {"runs": [], "pass": 0}
 
@@ -150,7 +183,13 @@ def run_case(case: dict, *, n: int = 5) -> dict:
 
         # --- PWC ---
         try:
-            r2 = run_pwc(case["query"], max_iter=3, verbose=False)
+            r2 = run_pwc(
+                case["query"], 
+                max_iter=3, 
+                verbose=False,
+                validate=validate,
+                parallel=parallel,
+            )
         except Exception as e:
             r2 = {"answer": None, "error": f"{type(e).__name__}: {e}",
                   "trace": [], "plan": None}
@@ -163,6 +202,8 @@ def run_case(case: dict, *, n: int = 5) -> dict:
         "query": case["query"],
         "comment": case["comment"],
         "n": n,
+        "validate": validate,
+        "parallel": parallel,
         "single": single,
         "pwc": pwc,
     }
@@ -174,14 +215,22 @@ def main():
                     help="Только один прогон каждого кейса (быстро)")
     ap.add_argument("-n", type=int, default=5,
                     help="Сколько прогонов на кейс (default=5)")
+    ap.add_argument("--no-validate", action="store_true",
+                    help="Отключить валидатор схемы")
+    ap.add_argument("--sequential", action="store_true",
+                    help="Отключить параллельное исполнение")
     args = ap.parse_args()
     n = 1 if args.single else args.n
+    validate = not args.no_validate
+    parallel = not args.sequential
 
-    print(f"Eval С6: {len(CASES)} кейсов × {n} прогонов\n")
+    print(f"Eval С6: {len(CASES)} кейсов × {n} прогонов")
+    print(f"Режим: validate={'ON' if validate else 'OFF'}, parallel={'ON' if parallel else 'OFF'}\n")
+    
     results = []
     for case in CASES:
         print(f"=== {case['id']}: {case['query'][:70]}...")
-        r = run_case(case, n=n)
+        r = run_case(case, n=n, validate=validate, parallel=parallel)
         results.append(r)
         s = r["single"]; p = r["pwc"]
         print(f"   single: {s['pass']}/{n}    pwc: {p['pass']}/{n}")
@@ -201,6 +250,7 @@ def main():
     out.write_text(json.dumps(results, ensure_ascii=False, indent=2,
                               default=str), encoding="utf-8")
     print(f"\nРезультаты: {out}")
+    print(f"Конфигурация: validate={validate}, parallel={parallel}")
 
 
 if __name__ == "__main__":

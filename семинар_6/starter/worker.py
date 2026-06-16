@@ -43,9 +43,9 @@ def worker(sq: SubQuestion, prev_answers: dict[int, WorkerAnswer]) -> WorkerAnsw
         for dep_id in sq.depends_on:
             if dep_id in prev_answers:
                 a = prev_answers[dep_id]
-                lines.append(f" {dep_id}.'{a.question_snippet}' -> {a.answer}")
+                lines.append(f"  {dep_id}. '{a.question_snippet}' → {a.answer}")
             else:
-                lines.append(f" {dep_id}.'(ответ недоступен)'")
+                lines.append(f"  {dep_id}. '(ответ недоступен)'")
         prev_context = "\n".join(lines)
     else:
         prev_context = "(нет зависимостей — независимый подвопрос)"

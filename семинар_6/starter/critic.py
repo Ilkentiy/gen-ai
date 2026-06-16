@@ -52,6 +52,7 @@ def critic(
     question: str,
     plan: Plan,
     answers: dict[int, WorkerAnswer],
+    temperature: float = 0.7,
 ) -> Verdict:
     plan_lines = []
     for sq in plan.subquestions:
@@ -69,8 +70,7 @@ def critic(
     for sq_id in sorted(answers):
         a = answers[sq_id]
         tools = ",".join(a.used_tools) or "—"
-        ans_lines.append(f"  {sq.id}. [{tools}] {a.answer}")
-
+        ans_lines.append(f"  {sq_id}. [{tools}] {a.answer}")
     answers_text = "\n".join(ans_lines) or "(ответов нет)"
 
     client = make_client()
@@ -86,6 +86,6 @@ def critic(
         ],
         response_model=Verdict,
         # TODO (блок 3.2): поставь temperature=0.7 (не 0.0).
-        temperature=0.7,
+        temperature=temperature,
         max_retries=2,
     )
