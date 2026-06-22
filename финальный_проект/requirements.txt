@@ -1,0 +1,6 @@
+pandas
+openai
+pydantic
+python-dotenv
+chromadb
+rank-bm25

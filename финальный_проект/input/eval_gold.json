@@ -1,0 +1,352 @@
+[
+  {
+    "id": "case_9284",
+    "subject": "",
+    "body": "Kundenservice, ich möchte einen Vorfall melden, der mehrere Produkte betrifft, einschließlich PHP 8.0 und OBS Studio. Das Problem wird wahrscheinlich durch Serverüberlastung und Integrationsfehler verursacht. Ich habe bereits Maßnahmen ergriffen, um das Problem zu beheben, wie das Neustarten der Dienste, das Löschen des Cache und die Überprüfung der Serverprotokolle. Dennoch besteht das Problem weiterhin. Ich würde eine schnelle Übernahme der Angelegenheit begrüßen und um eine Lösung bitten. Bitte lassen Sie mich wissen, wenn Sie weitere Informationen benötigen, um das Problem zu beheben. Ich stehe zur Verfügung.",
+    "expected": {
+      "type": "Incident",
+      "queue": "Technical Support",
+      "priority": "high",
+      "tags": [
+        "Performance",
+        "Outage"
+      ]
+    }
+  },
+  {
+    "id": "case_2647",
+    "subject": "",
+    "body": "Sehr geehrter Kundenservice, ich möchte detaillierte Integrationsanleitungen für Oracle Database 19c innerhalb einer skalierbaren SaaS-Projektmanagementplattform anfordern. Könnten Sie Schritt-für-Schritt-Anweisungen bereitstellen, um beide Systeme erfolgreich zu verbinden? Außerdem wäre ich dankbar für zusätzliche Ressourcen, die den Integrationsprozess erleichtern, um einen reibungslosen Ablauf zu gewährleisten. Insbesondere interessiere ich mich für die erforderlichen Voraussetzungen, notwendigen Konfigurationseinstellungen sowie potenzielle Fallstricke, auf die man achten sollte. Vielen Dank im Voraus für Ihre Unterstützung. Ich freue mich auf Ihre baldige Rückmeldung. Mit freundlichen Grüßen",
+    "expected": {
+      "type": "Request",
+      "queue": "Technical Support",
+      "priority": "high",
+      "tags": [
+        "Product",
+        "Documentation"
+      ]
+    }
+  },
+  {
+    "id": "case_3820",
+    "subject": "Issues with Brand Expansion",
+    "body": "Despite enhancing ad text and boosting the budget, engagement levels remain low.",
+    "expected": {
+      "type": "Incident",
+      "queue": "IT Support",
+      "priority": "high",
+      "tags": [
+        "Marketing",
+        "Campaign"
+      ]
+    }
+  },
+  {
+    "id": "case_18831",
+    "subject": "Unusual Decline in Engagement Metrics for Campaigns",
+    "body": "noted a sudden decline in engagement metrics across digital campaigns. this might be due to recent algorithm changes on social platforms. adjusted ad targeting and refreshed content but no improvement yet. would greatly appreciate your assistance in identifying the cause and providing a solution to enhance engagement metrics.",
+    "expected": {
+      "type": "Incident",
+      "queue": "Returns and Exchanges",
+      "priority": "high",
+      "tags": [
+        "Performance",
+        "Feedback"
+      ]
+    }
+  },
+  {
+    "id": "case_7667",
+    "subject": "Medizinische Daten in Gesundheits-IT-Lösungen",
+    "body": "Sehr geehrter Kundenservice, ich möchte mich nach Gesundheits-IT-Lösungen zum Schutz medizinischer Daten in Krankenhausystemen erkundigen. Könnten Sie bitte Details zu den angebotenen Lösungen, Verschlüsselungstechniken, Zugangskontrollen und Netzwerksicherheitsmaßnahmen bereitstellen? Ich wäre auch dankbar für Informationen zu etwaigen Compliance-Zertifizierungen Ihrer Lösungen, wie beispielsweise HIPAA. Außerdem würde ich gerne Fallstudien oder Beispiele erfolgreicher Implementierungen im Gesundheitswesen sehen. Ich bin daran interessiert, mehr darüber zu erfahren, wie Ihre Lösungen dazu beitragen können, sensible medizinische Informationen zu schützen und Datenpannen zu verhindern. Bitte lassen Sie mich wissen, falls Sie weitere Informationen benötigen.",
+    "expected": {
+      "type": "Request",
+      "queue": "Billing and Payments",
+      "priority": "low",
+      "tags": [
+        "Security",
+        "IT"
+      ]
+    }
+  },
+  {
+    "id": "case_20356",
+    "subject": "Support for Unauthorized Access Incident",
+    "body": "An unauthorized access incident has occurred on the hospital's IT systems, possibly due to a phishing attack. Despite updating passwords and conducting security audits, the issues persist.",
+    "expected": {
+      "type": "Incident",
+      "queue": "Technical Support",
+      "priority": "high",
+      "tags": [
+        "Security",
+        "Virus"
+      ]
+    }
+  },
+  {
+    "id": "case_8242",
+    "subject": "Marketing Problem",
+    "body": "The digital marketing campaign resulted in inconsistent brand messaging across various platforms, which might be due to coordination issues within the team. Several strategy adjustments and internal reviews have been attempted to resolve the issue, but it still persists. Assistance is needed to identify the root cause and implement a solution to ensure consistent brand messaging.",
+    "expected": {
+      "type": "Problem",
+      "queue": "Technical Support",
+      "priority": "low",
+      "tags": [
+        "Marketing",
+        "Strategy"
+      ]
+    }
+  },
+  {
+    "id": "case_11201",
+    "subject": "Folgende Diensteanlagenprobleme gemeldet",
+    "body": "Leider erleben wir unerwartete Diensteanlagenprobleme, die Datenanalysewerkzeuge betreffen. Es ist entscheidend, dass wir optimale Lösungen für Investitionen finden. Die Ausfälle könnten auf Hardware-Kompatibilitätsprobleme neuer Software-Updates zurückzuführen sein. Sie haben bereits versucht, die betroffenen Geräte neuzustarten und Softwareanwendungen zu installieren, aber der Problemstand hält an. Das Team steht Ihnen zur Verfügung, um weitere Informationen bereitzustellen und eine Lösung zu finden. Bitte antworten Sie mit Anweisungen für die nächsten Schritte, um das Problem zu lösen.",
+    "expected": {
+      "type": "Problem",
+      "queue": "Service Outages and Maintenance",
+      "priority": "high",
+      "tags": [
+        "Hardware",
+        "Performance"
+      ]
+    }
+  },
+  {
+    "id": "case_7690",
+    "subject": "Assistance Required for Performance Issues",
+    "body": "Users are experiencing significant performance drops during peak times, potentially due to server overload. We have restarted the servers, cleared caches, and optimized database queries, but the problems continue.",
+    "expected": {
+      "type": "Incident",
+      "queue": "Technical Support",
+      "priority": "high",
+      "tags": [
+        "Performance",
+        "Server Overload"
+      ]
+    }
+  },
+  {
+    "id": "case_24153",
+    "subject": "Financial Tool Functionality",
+    "body": "The financial firm's investment optimization tool has been accurately processing data analytics. However, a potential issue might have arisen due to a recent software update or configuration problem. Steps taken include restarting affected applications and verifying network connectivity via the VPN-router, but the problem still persists. We would greatly appreciate your assistance in resolving this issue as soon as possible to minimize any potential losses.",
+    "expected": {
+      "type": "Incident",
+      "queue": "Product Support",
+      "priority": "medium",
+      "tags": [
+        "Bug",
+        "Network"
+      ]
+    }
+  },
+  {
+    "id": "case_5954",
+    "subject": "",
+    "body": "Customer Support, users have reported system crashes and slowdowns during peak hours. Initial troubleshooting steps involved restarting services and clearing caches, but the issue persists. Ongoing investigation includes resource allocation and dependency conflict analysis. Our team is working diligently to resolve the problem. We appreciate your patience and understanding regarding this matter. If you have any questions or concerns, please do not hesitate to contact us. We will provide updates as soon as more information becomes available. Thank you for your continued support.",
+    "expected": {
+      "type": "Incident",
+      "queue": "Technical Support",
+      "priority": "high",
+      "tags": [
+        "Crash",
+        "Performance"
+      ]
+    }
+  },
+  {
+    "id": "case_20312",
+    "subject": "Request for Support with IBM SPSS Statistics 28",
+    "body": "I am seeking guidance on how to optimize data analytics and investment decisions using IBM SPSS Statistics 28. Could you provide tips and best practices for effectively utilizing the software? I would greatly appreciate advice on data preparation, model selection, and the interpretation of results. Additionally, are there specific features or add-ons in IBM SPSS Statistics 28 that enhance the accuracy and reliability of investment decisions? I look forward to hearing how we can explore ways to maximize the potential of the software.",
+    "expected": {
+      "type": "Request",
+      "queue": "IT Support",
+      "priority": "high",
+      "tags": [
+        "Feature",
+        "Documentation"
+      ]
+    }
+  },
+  {
+    "id": "case_17213",
+    "subject": "Improve Investment Strategies with Data Analytics",
+    "body": "Reaching out to the customer support team to inquire about the data analytics services offered that can enhance investment strategies. Would appreciate detailed information on the types of data analytics used to inform investment decisions, as well as the benefits of using data analytics for investment strategies, including improved risk management and increased returns. Could also provide examples of how data analytics have helped clients achieve their investment goals. Appreciate your prompt attention.",
+    "expected": {
+      "type": "Request",
+      "queue": "Customer Service",
+      "priority": "medium",
+      "tags": [
+        "Feedback",
+        "IT"
+      ]
+    }
+  },
+  {
+    "id": "case_3193",
+    "subject": "",
+    "body": "Sehr geehrter Kundendienst, wir bitten um Konfigurationsupdates für mehrere Produkte, um Strategien im digitalen Marketing zu verbessern und den Markenwachstum zu steigern. Das aktuelle Setup liefert die gewünschten Resultate, doch wir sind der Ansicht, dass die richtigen Anpassungen unsere Online-Präsenz stärken und eine breitere Zielgruppe ansprechen können. Wir möchten daher Aktualisierungen bei unseren Social-Media-Konten, E-Mail-Marketingkampagnen sowie Suchmaschinenoptimierung (SEO) Einstellungen vornehmen lassen. Besonders interessiert sind wir an der Aktualisierung unserer Facebook- und Twitter-Profile, der Integration ansprechender Inhalte sowie an Maßnahmen zur Personalisierung unserer E-Mail-Betreffzeilen, um die Öffnungsraten zu erhöhen.",
+    "expected": {
+      "type": "Change",
+      "queue": "Technical Support",
+      "priority": "high",
+      "tags": [
+        "Product",
+        "Feature"
+      ]
+    }
+  },
+  {
+    "id": "case_15841",
+    "subject": "Addressing Performance Challenges in Our SaaS Project Management Platform",
+    "body": "Our SaaS project management platform is currently facing performance challenges due to high database load on PostgreSQL. Despite restarting the application and clearing the cache, the issues continue to persist.",
+    "expected": {
+      "type": "Incident",
+      "queue": "Product Support",
+      "priority": "high",
+      "tags": [
+        "Performance",
+        "IT"
+      ]
+    }
+  },
+  {
+    "id": "case_096",
+    "subject": "Issues with RAID Controller Device Connectivity",
+    "body": "Dear Customer Support Team,\\n\\nI am reaching out to request assistance regarding ongoing issues with the RAID controller device connection. Over the past few weeks, I have observed sporadic device detection failures and frequent disconnections, which significantly impact system performance and data integrity.\\n\\nThe RAID controller appears to intermittently lose communication with connected drives, leading to degraded RAID arrays and occasional system crashes. Basic troubleshooting steps such as checking cable connections and updating firmware, as well as verifying power supply stability, have been attempted, but the problem persists.\\n\\nCould you please perform advanced diagnostic procedures?",
+    "expected": {
+      "type": "Incident",
+      "queue": "Product Support",
+      "priority": "medium",
+      "tags": [
+        "Hardware",
+        "Performance"
+      ]
+    }
+  },
+  {
+    "id": "case_28046",
+    "subject": "Versicherung medizinischer Datensicherheit",
+    "body": "Es gibt Schwierigkeiten bei der Sicherstellung der medizinischen Daten in unserem Hospital-IT-System. Die Einhaltung der Vorschriften scheint beeinträchtigt zu sein. Das Problem könnte durch die kürzlich durchgeführten Software-Updates und Konfigurationsänderungen entstanden sein. Ich habe versucht, die Datensicherung zu verbessern und die Zugriffssteuerungen zu überprüfen, aber die Probleme bestehen weiterhin. Ich bitte höflich um Hilfe, um das Problem zu lösen und die Vertraulichkeit und Integrität sensibler Patientendaten zu gewährleisten.",
+    "expected": {
+      "type": "Problem",
+      "queue": "Product Support",
+      "priority": "low",
+      "tags": [
+        "Security",
+        "Maintenance"
+      ]
+    }
+  },
+  {
+    "id": "case_3525",
+    "subject": "Unterstützung für Adobe Photoshop CC 2021 erforderlich",
+    "body": "Suche nach detaillierten Strategien zur Nutzung von Adobe Photoshop CC 2021 im Kontext des digitalen Marketers. Brauche konkrete Tipps für das Bearbeiten und Erstellen ansprechender Visuals.",
+    "expected": {
+      "type": "Request",
+      "queue": "Technical Support",
+      "priority": "high",
+      "tags": [
+        "Product",
+        "Support"
+      ]
+    }
+  },
+  {
+    "id": "case_12587",
+    "subject": "Support for Investment Strategy Optimization",
+    "body": "Could provide guidance on optimizing investment strategies using IBM Cloud data analytics tools to enhance returns?",
+    "expected": {
+      "type": "Request",
+      "queue": "Billing and Payments",
+      "priority": "high",
+      "tags": [
+        "Feedback",
+        "IT"
+      ]
+    }
+  },
+  {
+    "id": "case_21554",
+    "subject": "Security Measures for Medical Data Services",
+    "body": "Dear Customer Support, please inquire about the steps the company takes to ensure the security of medical data and the IT services offered to healthcare providers. Could you provide information on the technologies and protocols used to ensure the confidentiality, integrity, and availability of sensitive medical information? We would also like to know about the training support offered to help maintain the security of medical data. Thank you in advance for your time.",
+    "expected": {
+      "type": "Request",
+      "queue": "Returns and Exchanges",
+      "priority": "low",
+      "tags": [
+        "Security",
+        "IT"
+      ]
+    }
+  },
+  {
+    "id": "case_18937",
+    "subject": "Problem with Data Integration Between MySQL and PostgreSQL",
+    "body": "Currently, we are encountering issues with data integration between MySQL and PostgreSQL, which is causing inaccurate investment analytics due to mismatched database schemas. We have already verified the database configurations and attempted manual reconciliation, but it hasn't been successful.",
+    "expected": {
+      "type": "Problem",
+      "queue": "Sales and Pre-Sales",
+      "priority": "low",
+      "tags": [
+        "Bug",
+        "Performance"
+      ]
+    }
+  },
+  {
+    "id": "case_11408",
+    "subject": "Assistance with Security Breach Concern",
+    "body": "A security breach has taken place, revealing sensitive medical information because of outdated security updates.",
+    "expected": {
+      "type": "Incident",
+      "queue": "Technical Support",
+      "priority": "high",
+      "tags": [
+        "Security",
+        "Account"
+      ]
+    }
+  },
+  {
+    "id": "case_6133",
+    "subject": "Support-Anfrage zu mehreren Produkten",
+    "body": "Sehr geehrter Kundenservice, ich möchte einen Vorfall melden, der mehrere Produkte betrifft, darunter eine Gaming-Maus, QuickBooks Online und MATLAB R2021a. Das Problem führt zu Systemverlangsamungen, was ich auf kürzliche Konflikte durch Software-as-a-Service-Updates zurückführe. Ich habe versucht, das Problem durch Neustart, Dienste beenden und Cache löschen zu beheben, was vorübergehend geholfen hat. Zusätzlich habe ich frühere Versionen zurückinstalliert, was erfolgreich war. Ich würde es sehr schätzen, wenn Sie dieses Anliegen schnell prüfen und eine Lösung anbieten könnten. Bitte informieren Sie mich über weitere Schritte.",
+    "expected": {
+      "type": "Incident",
+      "queue": "Product Support",
+      "priority": "high",
+      "tags": [
+        "Bug",
+        "Performance"
+      ]
+    }
+  },
+  {
+    "id": "case_5799",
+    "subject": "Problem with Data Accessibility",
+    "body": "A healthcare organization encountered difficulties accessing data across several systems, potentially due to network setup errors. They have rebooted the VPN router and checked Ansible scripts, but the problem remains. Kindly help us resolve this issue promptly.",
+    "expected": {
+      "type": "Incident",
+      "queue": "Technical Support",
+      "priority": "medium",
+      "tags": [
+        "Network",
+        "Disruption"
+      ]
+    }
+  },
+  {
+    "id": "case_7341",
+    "subject": "Mehrere Produktintegrationen sind fehlgeschlagen",
+    "body": "Sehr geehrter Kundendienst, ich möchte berichten, dass unsere Marketingagentur mehrere Produktintegrationen durchgeführt hat, die fehlgeschlagen sind und dadurch erhebliche Verzögerungen bei Kampagnen entstanden sind. Wir vermuten, dass Netzwerk- oder Konfigurationsprobleme die Ursache sein könnten. Unser Team hat versucht, die Geräte neu zu starten und die Einstellungen zu überprüfen, jedoch konnte das Problem nicht gelöst werden. Wir würden eine schnelle Fehlerbehebung begrüßen, um das Problem zu beheben. Bitte informieren Sie uns über die weiteren Schritte, die wir unternehmen können, und ob Sie zusätzliche Informationen benötigen. Wir freuen uns auf Ihre Rückmeldung.",
+    "expected": {
+      "type": "Incident",
+      "queue": "IT Support",
+      "priority": "medium",
+      "tags": [
+        "Bug",
+        "Network"
+      ]
+    }
+  }
+]

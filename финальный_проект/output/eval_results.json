@@ -1,0 +1,776 @@
+{
+  "metrics": {
+    "total": 25,
+    "type_accuracy": 0.72,
+    "queue_accuracy": 0.24,
+    "priority_accuracy": 0.24,
+    "tags_accuracy": 0.08,
+    "hallucination_pass_rate": 1.0,
+    "judge_pass_rate": 0.96,
+    "avg_steps": 3.0,
+    "overall_pass_rate": 0.08,
+    "errors": [
+      {
+        "case_id": "case_2647",
+        "errors": [
+          null,
+          "queue",
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_3820",
+        "errors": [
+          "type",
+          "queue",
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_18831",
+        "errors": [
+          null,
+          "queue",
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_7667",
+        "errors": [
+          null,
+          "queue",
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_20356",
+        "errors": [
+          null,
+          null,
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_8242",
+        "errors": [
+          null,
+          null,
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_11201",
+        "errors": [
+          "type",
+          "queue",
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_7690",
+        "errors": [
+          null,
+          null,
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_24153",
+        "errors": [
+          null,
+          "queue",
+          null
+        ]
+      },
+      {
+        "case_id": "case_5954",
+        "errors": [
+          "type",
+          "queue",
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_20312",
+        "errors": [
+          null,
+          "queue",
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_17213",
+        "errors": [
+          null,
+          "queue",
+          null
+        ]
+      },
+      {
+        "case_id": "case_3193",
+        "errors": [
+          "type",
+          "queue",
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_15841",
+        "errors": [
+          "type",
+          "queue",
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_096",
+        "errors": [
+          null,
+          "queue",
+          null
+        ]
+      },
+      {
+        "case_id": "case_28046",
+        "errors": [
+          "type",
+          "queue",
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_3525",
+        "errors": [
+          null,
+          "queue",
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_12587",
+        "errors": [
+          null,
+          "queue",
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_21554",
+        "errors": [
+          null,
+          "queue",
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_18937",
+        "errors": [
+          null,
+          "queue",
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_11408",
+        "errors": [
+          null,
+          "queue",
+          null
+        ]
+      },
+      {
+        "case_id": "case_6133",
+        "errors": [
+          null,
+          "queue",
+          "priority"
+        ]
+      },
+      {
+        "case_id": "case_7341",
+        "errors": [
+          "type",
+          null,
+          "priority"
+        ]
+      }
+    ]
+  },
+  "detailed": [
+    {
+      "case_id": "case_9284",
+      "type_correct": true,
+      "queue_correct": true,
+      "priority_correct": true,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 0.95,
+        "overall_score": 0.975,
+        "passed": true,
+        "feedback": "Тикет правильно классифицирован по типу, отделу и приоритету. Теги соответствуют описанию проблемы. Сводка корректна, только немного упрощена для краткости."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_2647",
+      "type_correct": true,
+      "queue_correct": false,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 1.0,
+        "overall_score": 1.0,
+        "passed": true,
+        "feedback": "Все поля были правильно определены и заполнены без ошибок."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_3820",
+      "type_correct": false,
+      "queue_correct": false,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 0.8,
+        "queue_score": 1.0,
+        "priority_score": 0.9,
+        "quotes_score": 0.0,
+        "completeness_score": 0.75,
+        "overall_score": 0.825,
+        "passed": true,
+        "feedback": "Тип и отдел указаны правильно, приоритет выбран корректно. Теги содержат ключевые аспекты проблемы. Однако сводка переведена не совсем точно."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_18831",
+      "type_correct": true,
+      "queue_correct": false,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 0.8,
+        "queue_score": 1.0,
+        "priority_score": 0.9,
+        "quotes_score": 0.0,
+        "completeness_score": 0.75,
+        "overall_score": 0.825,
+        "passed": true,
+        "feedback": "Тип и отдел указаны правильно, приоритет выбран корректно. Теги полезны, но можно было бы добавить больше контекста в анализ. Сводка хорошо отражает суть проблемы."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_7667",
+      "type_correct": true,
+      "queue_correct": false,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 0.95,
+        "overall_score": 0.975,
+        "passed": true,
+        "feedback": "Тикет анализирован корректно и полнота анализа высока, за исключением небольшого недостатка в детализации приоритета."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_20356",
+      "type_correct": true,
+      "queue_correct": true,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 0.85,
+        "overall_score": 0.925,
+        "passed": true,
+        "feedback": "Тип, отдел и приоритет указаны правильно. Сводка корректна, но можно уточнить детали проблемы."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_8242",
+      "type_correct": true,
+      "queue_correct": true,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 0.8,
+        "queue_score": 0.9,
+        "priority_score": 0.75,
+        "quotes_score": 0.0,
+        "completeness_score": 0.9,
+        "overall_score": 0.825,
+        "passed": true,
+        "feedback": "Тип и отдел указаны правильно, но приоритет можно было бы повысить, так как проблема требует внимания для устранения несоответствия бренда. Анализ полный, только рекомендуется уточнить приоритет."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_11201",
+      "type_correct": false,
+      "queue_correct": false,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 0.95,
+        "overall_score": 0.9375,
+        "passed": true,
+        "feedback": "Тикет правильно классифицирован как тип 'Incident', отдел 'Technical Support' и приоритет 'medium'. Теги выбраны корректно, но можно было бы уточнить информацию о проблеме (например, указать конкретные модели оборудования или версии программного обеспечения)."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_7690",
+      "type_correct": true,
+      "queue_correct": true,
+      "priority_correct": false,
+      "tags_correct": true,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 0.85,
+        "overall_score": 0.925,
+        "passed": true,
+        "feedback": "Тип, отдел и приоритет указаны правильно. Сводка корректно описывает проблему. Однако можно уточнить детали проблемы или предложить дополнительные действия для решения."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_24153",
+      "type_correct": true,
+      "queue_correct": false,
+      "priority_correct": true,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 0.85,
+        "overall_score": 0.925,
+        "passed": true,
+        "feedback": "Тип тикета, отдел и приоритет указаны правильно. Теги выбраны корректно. Сводка предоставлена подробно, но можно было бы уточнить статус текущих шагов по решению проблемы."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_5954",
+      "type_correct": false,
+      "queue_correct": false,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 0.95,
+        "overall_score": 0.975,
+        "passed": true,
+        "feedback": "Тикет правильно классифицирован по типу, отделу и приоритету. Информация о проблеме предоставлена полностью, с учетом текущих шагов решения проблемы."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_20312",
+      "type_correct": true,
+      "queue_correct": false,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 1.0,
+        "overall_score": 1.0,
+        "passed": true,
+        "feedback": "Тикет анализирован корректно и полностью. Все поля заполнены правильно, теги выбраны точно, сводка соответствует содержанию запроса."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_17213",
+      "type_correct": true,
+      "queue_correct": false,
+      "priority_correct": true,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 1.0,
+        "overall_score": 1.0,
+        "passed": true,
+        "feedback": "Все поля были правильно определены и заполнены без ошибок."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_3193",
+      "type_correct": false,
+      "queue_correct": false,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 0.8,
+        "queue_score": 0.9,
+        "priority_score": 0.75,
+        "quotes_score": 0.0,
+        "completeness_score": 0.85,
+        "overall_score": 0.8125,
+        "passed": true,
+        "feedback": "Тип тикета и отдел указаны правильно, но приоритет можно было бы определить более точно. Аналитика полна и точна."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_15841",
+      "type_correct": false,
+      "queue_correct": false,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 0.85,
+        "overall_score": 0.925,
+        "passed": true,
+        "feedback": "Тип, отдел и приоритет указаны правильно. Теги выбраны корректно. Сводка хорошо описывает проблему, но можно было бы уточнить возможные причины или шаги для диагностики."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_096",
+      "type_correct": true,
+      "queue_correct": false,
+      "priority_correct": true,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 1.0,
+        "overall_score": 1.0,
+        "passed": true,
+        "feedback": "Все поля анализа тикета указаны корректно и полностью отражают суть проблемы, без ошибок."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_28046",
+      "type_correct": false,
+      "queue_correct": false,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 0.85,
+        "overall_score": 0.925,
+        "passed": true,
+        "feedback": "Тип, отдел и приоритет указаны правильно. Теги выбраны корректно, но можно было бы добавить более конкретные теги, такие как 'Hospital IT System' или 'Medical Data Protection'. Сводка хорошо описывает проблему."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_3525",
+      "type_correct": true,
+      "queue_correct": false,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 0.8,
+        "queue_score": 1.0,
+        "priority_score": 0.9,
+        "quotes_score": 0.0,
+        "completeness_score": 0.95,
+        "overall_score": 0.92,
+        "passed": true,
+        "feedback": "Тип запроса и отдел указаны правильно, приоритет выбран корректно, теги полные и точные. Сводка хорошо отражает содержание тикета."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_12587",
+      "type_correct": true,
+      "queue_correct": false,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 0.5,
+        "quotes_score": 0.0,
+        "completeness_score": 0.8,
+        "overall_score": 0.74,
+        "passed": false,
+        "feedback": "Тип и отдел указаны правильно, но приоритет можно было бы повысить, так как это может касаться финансовых стратегий. Полное описание тикета дано, однако, отсутствуют некоторые детали, такие как конкретные проблемы или ожидаемые риски."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_21554",
+      "type_correct": true,
+      "queue_correct": false,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 1.0,
+        "overall_score": 1.0,
+        "passed": true,
+        "feedback": "Все поля анализа тикета были правильно определены и отражены в результате."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_18937",
+      "type_correct": true,
+      "queue_correct": false,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 1.0,
+        "overall_score": 1.0,
+        "passed": true,
+        "feedback": "Все поля были правильно определены и заполнены. Сводка точно отражает суть проблемы."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_11408",
+      "type_correct": true,
+      "queue_correct": false,
+      "priority_correct": true,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 1.0,
+        "overall_score": 1.0,
+        "passed": true,
+        "feedback": "Все поля анализа тикета были правильно определены и описанные."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_6133",
+      "type_correct": true,
+      "queue_correct": false,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 0.95,
+        "overall_score": 0.975,
+        "passed": true,
+        "feedback": "Тикет правильно классифицирован по типу, отделу и приоритету. В анализе указаны все ключевые элементы проблемы, включая упомянутые продукты и причины. Однако можно было бы более подробно описать последовательность действий пользователя для восстановления системы."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_5799",
+      "type_correct": true,
+      "queue_correct": true,
+      "priority_correct": true,
+      "tags_correct": true,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 0.85,
+        "overall_score": 0.925,
+        "passed": true,
+        "feedback": "Тип, отдел и приоритет указаны правильно. Сводка корректно описывает проблему, но можно было бы уточнить детали сети или предположить другие возможные причины проблемы."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    },
+    {
+      "case_id": "case_7341",
+      "type_correct": false,
+      "queue_correct": true,
+      "priority_correct": false,
+      "tags_correct": false,
+      "hallucination_passed": true,
+      "judge_score": {
+        "category_score": 1.0,
+        "queue_score": 1.0,
+        "priority_score": 1.0,
+        "quotes_score": 0.0,
+        "completeness_score": 0.95,
+        "overall_score": 0.975,
+        "passed": true,
+        "feedback": "Тикет корректно классифицирован по типу, отделу и приоритету. Теги выбраны правильно. Сводка предоставлена четко и содержательно, однако можно было бы уточнить даты или конкретные кампании для более полного анализа."
+      },
+      "steps": 3,
+      "tools_used": [
+        "classify_ticket",
+        "search_kb"
+      ]
+    }
+  ]
+}
