@@ -14,13 +14,11 @@ pip install -r requirements.txt
 
 ```bash
 cp .env.example .env
-Пример .env:
 
-```
 LLM_BASE_URL=http://localhost:11434/v1
 LLM_AUTH_TOKEN=ollama
 LLM_MODEL=llama3.2:3b
-
+```
 ## Запуск
 Полный запуск (подготовка данных → обработка → оценка):
 
@@ -47,6 +45,7 @@ predictions.json — предсказания по всем тикетам
 eval_results.json — метрики оценки
 
 ## Структура
+```bash
 support_ticket_routing/
 ├── run_all.py          # Полный запуск
 ├── prepare_data.py     # Подготовка данных
@@ -70,3 +69,4 @@ support_ticket_routing/
 └── output/
     ├── predictions.json
     └── eval_results.json
+```
